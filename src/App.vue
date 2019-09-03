@@ -8,7 +8,15 @@
   </div>
 </template>
 
-<style>
+<style lang="scss">
+@import "../node_modules/bulma/sass/utilities/initial-variables";
+@import "../node_modules/bulma/sass/utilities/functions";
+
+$primary: #63e0fc; // main color
+$info: #ebdd1b; // accent color
+
+@import "../node_modules/bulma/bulma.sass";
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -28,4 +36,5 @@
 #nav a.router-link-exact-active {
   color: #42b983;
 }
+
 </style>
