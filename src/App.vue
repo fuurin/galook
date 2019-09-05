@@ -12,7 +12,7 @@
 @import "../node_modules/bulma/sass/utilities/initial-variables";
 @import "../node_modules/bulma/sass/utilities/functions";
 
-$primary: #63e0fc; // main color
+$primary: #00bcd4; // main color
 $info: #ebdd1b; // accent color
 
 @import "../node_modules/bulma/bulma.sass";
