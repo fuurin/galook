@@ -1,10 +1,14 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <nav class="navbar is-fixed-top has-background-primary">
+      <img class="head-logo" src="./assets/logo_gray.png" alt="logo">
+    </nav>
+    <div class="container">
+      <router-view/>
     </div>
-    <router-view/>
+    <footer class="footer">
+      <p>ぎゃルック！ エロゲ/ギャルゲAI検索サービス ©️ Noimin, fuurin 2019</p>
+    </footer>
   </div>
 </template>
 
@@ -23,18 +27,22 @@ $info: #ebdd1b; // accent color
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-}
-#nav {
-  padding: 30px;
+
+  // for sticky footer
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+.head-logo {
+  width: 320px;
+  height: 60px;
+  margin: 2px 5px;
 }
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+ 
+.footer {
+  margin-top: auto;
+  padding: 24px;
 }
 
 </style>
