@@ -11,12 +11,14 @@
 
         <div class="search-result" v-show="candidates.length !== 0">
             <div class="result-list list is-hoverable">
-                <router-link v-for="cand in candidates" :key="cand.id"
-                    class="list-item has-text-left has-text-primary"
-                    :to="{name: 'game', params: {id: cand.id}}"
-                >
-                    {{ cand.title }}
-                </router-link>
+                <div v-for="cand in candidates" :key="cand.id">
+                    <router-link 
+                        class="list-item has-text-left has-text-primary"
+                        :to="{name: 'game', params: {id: cand.id}}"
+                    >
+                        {{ cand.title }}
+                    </router-link>
+                </div>
             </div>
             <div class="columns" v-if="candidates.length > numCandidates">
                 <div class="column has-text-left">
@@ -31,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch} from 'vue-property-decorator';
 import GameCandidate from '@/types/GameCandidate';
 import Api from '@/utils/Api';
 

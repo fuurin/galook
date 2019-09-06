@@ -1,0 +1,78 @@
+<template>
+    <div class="panel card">
+        <div class="card-content">
+            <div class="columns">
+                <div class="column is-2">
+                    <a :href="game.url">
+                        <img class="is-hidden-touch" :src="game.image">
+                        <img class="is-hidden-desktop" :src="game.image">
+                    </a>
+                </div>
+                <div class="column is-10">
+                    <div class="has-text-left">
+                        <div>
+                            <a :href="game.url"
+                                class="has-text-primary title is-4"
+                            >
+                                {{ game.title }}
+                            </a>
+                        </div>
+                        <nav class="breadcrumb">
+                            <ul>
+                                <li class="is-active"><a>ブランド： {{ game.brand }}</a></li>
+                                <li class="is-active"><a>カテゴリー： {{ category() }}</a></li>
+                                <li class="is-active"><a>ライター： {{ writer() }}</a></li>
+                            </ul>
+                        </nav>
+                        <div>
+                            {{ game.story }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import Game from '@/types/Game';
+
+@Component
+export default class GameContent extends Vue {
+    @Prop()
+    private game!: Game;
+
+    private isOpened: boolean = false;
+
+    private category(): string {
+        return this.game.category.join(', ');
+    }
+
+    private subgenre(): string {
+        return this.game.subgenre.join(', ');
+    }
+
+    private writer(): string {
+        return this.game.writer.join(", ");
+    }
+}
+</script>
+
+<style scoped>
+img {
+    margin: 0 auto;
+}
+
+.is-hidden-touch {
+    width: 120px;
+}
+
+.is-hidden-desktop {
+    width: 300px;
+}
+
+.breadcrumb {
+    margin: 10px 0;
+}
+</style>

@@ -13,12 +13,12 @@ export default new Router({
       component: require('@/views/Home.vue').default,
     },
     {
-      path: '/game',
+      path: '/game/:id',
       name: 'game',
       component: require('@/views/GameSearchResult.vue').default,
     },
     {
-      path: '/synopsis',
+      path: '/synopsis/:synopsis',
       name: 'synopsis',
       component: require('@/views/SynopsisSearchResult.vue').default,
     },

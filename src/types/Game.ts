@@ -8,7 +8,7 @@ export default class Game {
       game.subgenre || [],
       game.title,
       game.url || "",
-      game.image || "",
+      game.image || "../assets/no_image.svg",
       game.writer || []);
   }
 

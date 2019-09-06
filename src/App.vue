@@ -1,18 +1,123 @@
 <template>
   <div id="app">
-    <nav class="navbar is-fixed-top has-background-primary">
-      <router-link to="/">
-        <img class="head-logo" src="./assets/logo_gray.png" alt="logo">
-      </router-link>
+    <nav class="navbar is-fixed-top has-background-primary level is-mobile">
+      <div class="level-left">
+        <router-link to="/">
+          <img class="head-logo" src="./assets/logo_white.png" alt="logo">
+        </router-link>
+      </div>
+      <div class="level-right">
+        <a v-if="$route.path !== '/'" class="button" @click="openModal">
+          <i class="fas fa-search"></i>検索
+        </a>
+      </div>
     </nav>
-    <div class="container">
+    <div class="container" v-if="galookAgeChecked">
       <router-view/>
+    </div>
+    <div class="container" v-else>
+      <div class="section">
+        恐れ入りますが、当サイトは18歳未満の方のご利用をお断りしております。
+      </div>
     </div>
     <footer class="footer">
       <p>ぎゃルック！ エロゲ/ギャルゲAI検索サービス ©️ Noimin, fuurin 2019</p>
     </footer>
+
+    <div class="modal" :class="{'is-active': modalOpened}">
+      <div class="modal-background" @click="closeModal"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">検索</p>
+          <button class="delete" aria-label="close" @click="closeModal"></button>
+        </header>
+        <section class="modal-card-body">
+          <GameSearch></GameSearch>
+          <SynopsisSearch></SynopsisSearch>
+        </section>
+        <footer class="modal-card-foot">
+        </footer>
+      </div>
+    </div>
+
+    <div class="modal" :class="{'is-active': ageCheckOpened}">
+      <div class="modal-background" @click="closeAgeCheck"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">警告</p>
+        </header>
+        <section class="modal-card-body">
+          <p>本サイトはアダルトコンテンツを掲載しております。</p>
+          <p>18歳未満の方が利用することはできません。</p>
+          <p>あなたは18歳以上ですか？</p>
+          <div class="level age-check-buttons is-mobile">
+            <div class="level-left has-text-centered">
+              <a class="button is-primary is-large" @click="ageCheck">はい</a>              
+            </div>
+            <div class="level-right has-text-centered">
+              <a class="button is-large" @click="closeAgeCheck">いいえ</a>
+            </div>
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+        </footer>
+      </div>
+    </div>
+
   </div>
 </template>
+
+<script lang="ts">
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import GameSearch from '@/components/GameSearch.vue';
+import SynopsisSearch from '@/components/SynopsisSearch.vue';
+import Cookies from 'js-cookie';
+
+const AGE_CHECK_KEY = "galookAgeChecked";
+
+@Component({
+  components: {
+    GameSearch,
+    SynopsisSearch,
+  },
+})
+export default class Home extends Vue {
+  private galookAgeChecked: boolean = false;
+  private ageCheckOpened: boolean = true;
+  private modalOpened: boolean = false;
+
+  private created() {
+    const checked = Cookies.get(AGE_CHECK_KEY);
+    if (checked && checked === "true") {
+      this.galookAgeChecked = true;
+      this.closeAgeCheck();
+    }
+  }
+
+  @Watch('$route')
+  private routeUpdate() {
+    this.closeModal();
+  }
+
+  private ageCheck() {
+    this.galookAgeChecked = true;
+    this.ageCheckOpened = false;
+    Cookies.set(AGE_CHECK_KEY, "true");
+  }
+
+  private closeAgeCheck() {
+    this.ageCheckOpened = false;
+  }
+
+  private openModal() {
+    this.modalOpened = true;
+  }
+
+  private closeModal() {
+    this.modalOpened = false;
+  }
+}
+</script>
 
 <style lang="scss">
 @import "../node_modules/bulma/sass/utilities/initial-variables";
@@ -39,7 +144,14 @@ $info: #ebdd1b; // accent color
 .head-logo {
   width: 320px;
   height: 60px;
-  margin: 4px 8px;
+}
+
+.level-left {
+  margin: 4px 0px 6px 8px;
+}
+
+.level-right {
+  margin-right: 16px;
 }
 
 .container {
@@ -52,4 +164,16 @@ $info: #ebdd1b; // accent color
   padding: 24px;
 }
 
+.modal-background {
+  background-color: rgba(10, 10, 10, 0.5);
+}
+
+.modal-card {
+  max-width: 560px;
+}
+
+.age-check-buttons {
+  width: 350px;
+  margin: 15px auto 0px auto;
+}
 </style>

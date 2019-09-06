@@ -8,7 +8,7 @@
         </div>
         <router-link 
             class="button is-primary is-medium is-outlined is-rounded"
-            :to="{name: 'synopsis', params: {synopsis: synopsis}}"
+            :to="{name: 'synopsis', params: {synopsis: synopsis || 'no text'}}"
             :disabled="empty()" 
             :style="{pointerEvents: empty() ? 'none' : 'all'}"
         >
@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue} from 'vue-property-decorator';
 
 @Component
 export default class SynopsisSearch extends Vue {
