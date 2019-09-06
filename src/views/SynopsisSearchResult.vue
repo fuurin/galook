@@ -1,8 +1,8 @@
 <template>
     <div>
         <section class="section">
-            <h1 class="title is-3">
-                「{{ synopsis }}」
+            <h1 class="synopsis title is-3">
+                『{{ synopsis }}』
             </h1>
             <p class="title is-4 is-pulled-right">
                 というあらすじに近いゲーム
@@ -53,5 +53,7 @@ export default class SynopsisSearchResult extends Vue {
 </script>
 
 <style scoped>
-
+.synopsis {
+    padding: 0 30px;
+}
 </style>

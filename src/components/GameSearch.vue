@@ -8,24 +8,18 @@
                 </span>
             </div>
         </div>
-
-        <div class="search-result" v-show="candidates.length !== 0">
+        
+        <div class="search-result" v-show="empty()">
             <div class="result-list list is-hoverable">
-                <div v-for="cand in candidates" :key="cand.id">
-                    <router-link 
-                        class="list-item has-text-left has-text-primary"
-                        :to="{name: 'game', params: {id: cand.id}}"
-                    >
-                        {{ cand.title }}
-                    </router-link>
-                </div>
-            </div>
-            <div class="columns" v-if="candidates.length > numCandidates">
-                <div class="column has-text-left">
-                    <a class="button" disabled>←</a>
-                </div>
-                <div class="column has-text-right">
-                    <a class="button">→</a>
+                <div v-for="cand in candidates" :key="cand.id" 
+                    class="list-item has-text-left">
+                    <small>
+                        <router-link class="has-text-primary"
+                            :to="{name: 'game', params: {id: cand.id}}"
+                        >
+                            {{ cand.title }}
+                        </router-link>
+                    </small>
                 </div>
             </div>
         </div>
@@ -38,7 +32,7 @@ import GameCandidate from '@/types/GameCandidate';
 import Api from '@/utils/Api';
 
 const ACCESS_INTERVAL: number = 500; // ms
-const NUM_CANDIDATES: number = 10;
+const NUM_CANDIDATES: number = 50;
 
 const api = new Api();
 
@@ -60,12 +54,20 @@ export default class GameSearch extends Vue {
         }, ACCESS_INTERVAL);
     }
 
+    private empty(): boolean {
+        return this.candidates.length > 0;
+    }
+
+    private paged(): boolean {
+        return this.candidates.length >= this.numCandidates;
+    }
+
     private access(searchText: string) {
         this.candidates = [];
         if (!searchText) { return; }
         api.gameTitleCandidates(searchText, (res: any) => {
             this.updateInterval(res.games);
-        });
+        }, this.numCandidates);
     }
 
     private updateInterval(games: any) {
@@ -87,10 +89,7 @@ export default class GameSearch extends Vue {
 }
 
 .list-item {
-    /* はみ出したところだけスクロールしたい https://webparts.cman.jp/string/scroll/ */
     max-width: 560px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
+
 </style>

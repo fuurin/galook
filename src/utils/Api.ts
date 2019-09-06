@@ -35,7 +35,11 @@ export default class Api {
 
     private access(endPointName: string, params: any, callback: (res: any) => void) {
         // axios.get(BASE_URL + endPointName, { params }).then(callback);
-        callback(exampleResponce);
+        const re = Object.assign({}, exampleResponce);
+        if (params.limit) {
+            re.games = re.games.slice(0, params.limit);
+        }
+        callback(re);
     }
 }
 

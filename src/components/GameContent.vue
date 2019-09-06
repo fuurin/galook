@@ -24,8 +24,11 @@
                                 <li class="is-active"><a>ライター： {{ writer() }}</a></li>
                             </ul>
                         </nav>
-                        <div>
-                            {{ game.story }}
+                        <div class="container story" :class="{'hidden-story': !isOpened}" @click="toggleOpened">
+                            <label v-show="!isOpened">
+                                <i class="fas fa-chevron-down"></i>
+                            </label>
+                            <p>{{ game.story }}</p>
                         </div>
                     </div>
                 </div>
@@ -56,6 +59,10 @@ export default class GameContent extends Vue {
     private writer(): string {
         return this.game.writer.join(", ");
     }
+
+    private toggleOpened() {
+        this.isOpened = !this.isOpened;
+    }
 }
 </script>
 
@@ -74,5 +81,27 @@ img {
 
 .breadcrumb {
     margin: 10px 0;
+}
+
+.story {
+    min-height: 100px;
+    margin: 0;
+}
+
+.hidden-story {
+    max-height: 100px;
+    overflow: hidden;
+}
+
+.hidden-story label {
+	position: absolute;
+    bottom: 0;
+	width: 100%;
+	height: 100px; /* グラデーションの高さ */
+    padding-top: 75px;
+    text-align: center;
+    vertical-align: text-bottom;
+    cursor: pointer;
+	background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 60%, rgba(255, 255, 255, 0.95) 100%); /* グラデーション */
 }
 </style>

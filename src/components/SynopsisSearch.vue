@@ -2,7 +2,10 @@
     <div class="synopsis-search-area">
         <div class="field">
             <div class="control">
-                <textarea class="textarea" placeholder="あらすじが似たゲームを検索" v-model="synopsis">
+                <textarea class="textarea" v-model="synopsis" 
+                    minlength="1" :maxlength="maxTextSize"
+                    placeholder="あらすじが似たゲームを検索"
+                >
                 </textarea>
             </div>
         </div>
@@ -20,9 +23,12 @@
 <script lang="ts">
 import { Component, Prop, Vue} from 'vue-property-decorator';
 
+const MAX_TEXT_SIZE = 100;
+
 @Component
 export default class SynopsisSearch extends Vue {
     private synopsis: string = "";
+    private maxTextSize: number = MAX_TEXT_SIZE;
 
     private empty(): boolean {
         return this.synopsis === "";

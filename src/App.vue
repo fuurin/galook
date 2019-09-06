@@ -13,7 +13,9 @@
       </div>
     </nav>
     <div class="container" v-if="galookAgeChecked">
-      <router-view/>
+      <transition mode="out-in">
+        <router-view/>
+      </transition>
     </div>
     <div class="container" v-else>
       <div class="section">
@@ -21,24 +23,27 @@
       </div>
     </div>
     <footer class="footer">
-      <p>ぎゃルック！ エロゲ/ギャルゲAI検索サービス ©️ Noimin, fuurin 2019</p>
+      <p>ぎゃルック！ エロゲ/ギャルゲAI検索サービス by Noimin, fuurin (2019)</p>
+      <p>Powered by <a href="http://www.getchu.com/">Getchu.com</a></p>
     </footer>
 
-    <div class="modal" :class="{'is-active': modalOpened}">
-      <div class="modal-background" @click="closeModal"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">検索</p>
-          <button class="delete" aria-label="close" @click="closeModal"></button>
-        </header>
-        <section class="modal-card-body">
-          <GameSearch></GameSearch>
-          <SynopsisSearch></SynopsisSearch>
-        </section>
-        <footer class="modal-card-foot">
-        </footer>
+    <transition mode="out-in" name="modal">
+      <div class="modal" :class="{'is-active': modalOpened}" v-show="modalOpened">
+        <div class="modal-background" @click="closeModal"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">検索</p>
+            <button class="delete" aria-label="close" @click="closeModal"></button>
+          </header>
+          <section class="modal-card-body">
+            <GameSearch></GameSearch>
+            <SynopsisSearch></SynopsisSearch>
+          </section>
+          <footer class="modal-card-foot">
+          </footer>
+        </div>
       </div>
-    </div>
+    </transition>
 
     <div class="modal" :class="{'is-active': ageCheckOpened}">
       <div class="modal-background" @click="closeAgeCheck"></div>
@@ -141,6 +146,13 @@ $info: #ebdd1b; // accent color
   min-height: 100vh;
 }
 
+.v-enter-active, .v-leave-active {
+  transition: opacity .2s;
+}
+.v-enter, .v-leave-to {
+  opacity: 0.2;
+}
+
 .head-logo {
   width: 320px;
   height: 60px;
@@ -162,6 +174,14 @@ $info: #ebdd1b; // accent color
 .footer {
   margin-top: auto;
   padding: 24px;
+}
+
+.modal-enter-active {
+  transition: opacity .2s;
+}
+
+.modal-enter {
+  opacity: 0;
 }
 
 .modal-background {
