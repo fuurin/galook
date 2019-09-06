@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <nav class="navbar is-fixed-top has-background-primary">
-      <img class="head-logo" src="./assets/logo_gray.png" alt="logo">
+      <router-link to="/">
+        <img class="head-logo" src="./assets/logo_gray.png" alt="logo">
+      </router-link>
     </nav>
     <div class="container">
       <router-view/>
@@ -37,7 +39,12 @@ $info: #ebdd1b; // accent color
 .head-logo {
   width: 320px;
   height: 60px;
-  margin: 2px 5px;
+  margin: 4px 8px;
+}
+
+.container {
+  margin-top: 100px;
+  margin-bottom: 100px;
 }
  
 .footer {
