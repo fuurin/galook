@@ -1,25 +1,34 @@
 <template>
   <div id="app">
     <nav class="navbar is-fixed-top has-background-primary level is-mobile">
-      <div class="level-left">
-        <router-link to="/">
-          <img class="head-logo" src="./assets/logo_white.png" alt="logo">
-        </router-link>
+      <div class="level-left has-text-left">
+        <div class="level-item">
+          <router-link to="/">
+            <img class="head-logo" src="./assets/logo_white.png" alt="logo">
+          </router-link>
+        </div>
       </div>
       <div class="level-right">
-        <a v-if="$route.path !== '/'" class="button" @click="openModal">
-          <i class="fas fa-search"></i>検索
-        </a>
+        <div class="level-item">
+          <a v-if="$route.path !== '/'" class="button" @click="openModal">
+            <i class="fas fa-search"></i>検索
+          </a>
+        </div>
       </div>
     </nav>
-    <div class="container" v-if="galookAgeChecked">
+    <div class="container main-container" v-if="galookAgeChecked">
       <transition mode="out-in">
         <router-view/>
       </transition>
     </div>
     <div class="container" v-else>
-      <div class="section">
-        恐れ入りますが、当サイトは18歳未満の方のご利用をお断りしております。
+      <div class="hero">
+        <div class="hero-body">
+          <div class="container">
+            <br><br><br><br><br>
+            <p>恐れ入りますが、当サイトは18歳未満の方のご利用をお断りしております。</p>
+          </div>
+        </div>
       </div>
     </div>
     <footer class="footer">
@@ -74,8 +83,8 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import GameSearch from '@/components/GameSearch.vue';
-import SynopsisSearch from '@/components/SynopsisSearch.vue';
+import GameSearch from './components/GameSearch.vue';
+import SynopsisSearch from './components/SynopsisSearch.vue';
 import Cookies from 'js-cookie';
 
 const AGE_CHECK_KEY = "galookAgeChecked";
@@ -139,11 +148,16 @@ $info: #ebdd1b; // accent color
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  width: 100%;
 
   // for sticky footer
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+}
+
+.main-container {
+  padding: 0 20px;
 }
 
 .v-enter-active, .v-leave-active {
@@ -154,12 +168,12 @@ $info: #ebdd1b; // accent color
 }
 
 .head-logo {
-  width: 320px;
-  height: 60px;
+  width: 40%;
 }
 
 .level-left {
   margin: 4px 0px 6px 8px;
+  max-width: 200px;
 }
 
 .level-right {
@@ -176,6 +190,7 @@ $info: #ebdd1b; // accent color
   padding: 24px;
 }
 
+
 .modal-enter-active {
   transition: opacity .2s;
 }
@@ -190,6 +205,7 @@ $info: #ebdd1b; // accent color
 
 .modal-card {
   max-width: 560px;
+  padding: 0 20px;
 }
 
 .age-check-buttons {

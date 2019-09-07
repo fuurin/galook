@@ -1,5 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import Home from './views/Home.vue';
+import GameSearchResult from './views/GameSearchResult.vue';
+import SynopsisSearchResult from './views/SynopsisSearchResult.vue';
 
 Vue.use(Router);
 
@@ -10,17 +13,17 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: require('@/views/Home.vue').default,
+      component: Home,
     },
     {
       path: '/game/:id',
       name: 'game',
-      component: require('@/views/GameSearchResult.vue').default,
+      component: GameSearchResult,
     },
     {
       path: '/synopsis/:synopsis',
       name: 'synopsis',
-      component: require('@/views/SynopsisSearchResult.vue').default,
+      component: SynopsisSearchResult,
     },
   ],
 });

@@ -23,9 +23,8 @@ export default class Home extends Vue {}
 
 <style scoped>
   .logo {
-    width: 560px;
-    height: 105px;
-    margin-top: 100px;
+    width: 100%;
+    margin-top: 30px;
     margin-bottom: 20px;
   }
 </style>
