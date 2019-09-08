@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="container">
         <section class="section">
             <h1 class="synopsis title is-3">
                 『{{ synopsis }}』
@@ -55,5 +55,10 @@ export default class SynopsisSearchResult extends Vue {
 <style scoped>
 .synopsis {
     padding: 0 30px;
+}
+
+hr {
+    width: 90%;
+    margin: 0 auto;
 }
 </style>

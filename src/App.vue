@@ -1,15 +1,13 @@
 <template>
   <div id="app">
-    <nav class="navbar is-fixed-top has-background-primary level is-mobile">
-      <div class="level-left has-text-left">
-        <div class="level-item">
-          <router-link to="/">
-            <img class="head-logo" src="./assets/logo_white.png" alt="logo">
+    <nav class="is-fixed-top has-background-primary is-mobile">
+      <div class="header-group">
+        <div class="head-logo is-pulled-left">
+          <router-link to="/" class="">
+            <img src="./assets/logo_white.png" alt="logo">
           </router-link>
         </div>
-      </div>
-      <div class="level-right">
-        <div class="level-item">
+        <div class="is-pulled-right">
           <a v-if="$route.path !== '/'" class="button" @click="openModal">
             <i class="fas fa-search"></i>検索
           </a>
@@ -64,12 +62,14 @@
           <p>本サイトはアダルトコンテンツを掲載しております。</p>
           <p>18歳未満の方が利用することはできません。</p>
           <p>あなたは18歳以上ですか？</p>
-          <div class="level age-check-buttons is-mobile">
-            <div class="level-left has-text-centered">
-              <a class="button is-primary is-large" @click="ageCheck">はい</a>              
+          <div class="age-check-group">
+            <div class="is-hidden-touch">
+              <a class="button is-large is-pulled-left is-primary" @click="ageCheck">はい</a>
+              <a class="button is-large is-pulled-right" @click="closeAgeCheck">いいえ</a>
             </div>
-            <div class="level-right has-text-centered">
-              <a class="button is-large" @click="closeAgeCheck">いいえ</a>
+            <div class="is-hidden-desktop">
+              <a class="button is-pulled-left is-primary" @click="ageCheck">はい</a>
+              <a class="button is-pulled-right" @click="closeAgeCheck">いいえ</a>
             </div>
           </div>
         </section>
@@ -157,6 +157,7 @@ $info: #ebdd1b; // accent color
 }
 
 .main-container {
+  max-width: 860px;
   padding: 0 20px;
 }
 
@@ -169,15 +170,6 @@ $info: #ebdd1b; // accent color
 
 .head-logo {
   width: 40%;
-}
-
-.level-left {
-  margin: 4px 0px 6px 8px;
-  max-width: 200px;
-}
-
-.level-right {
-  margin-right: 16px;
 }
 
 .container {
@@ -208,8 +200,15 @@ $info: #ebdd1b; // accent color
   padding: 0 20px;
 }
 
-.age-check-buttons {
-  width: 350px;
+.age-check-group > div {
   margin: 15px auto 0px auto;
+}
+
+.age-check-group > .is-hidden-touch {
+  max-width: 340px;
+}
+
+.age-check-group > .is-hidden-desktop {
+  max-width: 200px;
 }
 </style>

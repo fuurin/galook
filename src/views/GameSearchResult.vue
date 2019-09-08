@@ -79,6 +79,11 @@ img {
     margin: 0 auto;
 }
 
+hr {
+    width: 90%;
+    margin: 0 auto;
+}
+
 .is-hidden-touch {
     width: 150px;
 }
