@@ -22,3 +22,6 @@ yarn-error.log*
 *.sw?
 
 credentials.csv
+
+# 手元実験用
+api/src/similar_story/learn_story_vector.py
