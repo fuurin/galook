@@ -2,12 +2,15 @@
     <div class="panel card">
         <div class="card-content" @click="closeDetail">
             <div class="columns">
-                <div class="column is-2">
+                <div class="column is-3">
                     <a :href="game.url">
                         <img :class="d.respCls('image')" :src="game.image">
                     </a>
+                    <div class="has-text-right">
+                        <small class="is-size-7 has-text-grey">Image from Google</small>
+                    </div>
                 </div>
-                <div class="column is-10">
+                <div class="column is-9">
                     <div class="has-text-left">
                         <div>
                             <a :href="game.url"
@@ -31,7 +34,16 @@
                                 <div class="dropdown-content">
                                     <p class="dropdown-item">ブランド： {{ game.brand }}</p>
                                     <p class="dropdown-item">カテゴリー： {{ category() }}</p>
+                                    <p class="dropdown-item">ジャンル： {{ subgenre() }}</p>
                                     <p class="dropdown-item">ライター： {{ writer() }}</p>
+                                    <hr v-if="!isSearched()" class="dropdown-divider">
+                                    <div v-if="!isSearched()" class="dropdown-item">
+                                        <router-link 
+                                            :to="{name: 'game', params: {id: game.id}}"
+                                            class="has-text-primary">
+                                            類似のゲーム
+                                        </router-link>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -61,6 +73,11 @@ export default class GameContent extends Vue {
     private detailIsOpened: boolean = false;
     private storyIsOpened: boolean = false;
     private d: Device = new Device();
+
+    private isSearched(): boolean {
+        if (this.$route.name === "synopsis") return false;
+        return this.game.id.toString() === this.$route.params.id.toString();
+    }
 
     private category(): string {
         return this.game.category.join(', ');

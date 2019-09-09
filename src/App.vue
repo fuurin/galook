@@ -24,11 +24,11 @@
     <div class="is-hidden-touch" style="margin-top: 40px;"></div>
     <div class="container main-container" v-if="galookAgeChecked">
       <transition mode="out-in">
-        <router-view/>
+        <router-view :key="componentKey"/>
       </transition>
     </div>
     
-    <div class="container" v-else>
+    <div class="section" v-else>
       <div class="hero">
         <div class="hero-body">
           <div class="container">
@@ -111,6 +111,7 @@ const AGE_CHECK_KEY = "galookAgeChecked";
   },
 })
 export default class Home extends Vue {
+  private componentKey = 0;
   private galookAgeChecked: boolean = false;
   private ageCheckOpened: boolean = true;
   private modalOpened: boolean = false;
@@ -125,8 +126,10 @@ export default class Home extends Vue {
   }
 
   @Watch('$route')
-  private routeUpdate() {
+  private routeUpdate(to: any, from: any) {
+    window.scrollTo({top: 0, behavior: "smooth"});
     this.closeModal();
+    this.componentKey += 1;
   }
 
   private ageCheck() {

@@ -2,12 +2,15 @@
     <div>
         <section class="section">
             <div class="columns is-tablet">
-                <div class="column is-2">
+                <div class="column is-3">
                     <a :href="searchGame.url">
                         <img :class="d.respCls('image')" :src="searchGame.image">
                     </a>
+                    <div class="has-text-right">
+                        <small class="is-size-7 has-text-grey">Image from Google</small>
+                    </div>
                 </div>
-                <div class="column is-10 has-text-left">
+                <div class="column is-9 has-text-left">
                     <p class="title is-size-3-desktop is-size-4-touch">
                         <a :href="searchGame.url" class="has-text-primary">
                             {{searchGame.title}}
@@ -61,7 +64,7 @@ export default class GameSearchResult extends Vue {
     private accessGame(id: number) {
         api.game(id, (res: any) => {
             // const game = res.game;
-            const game = res.games[0];
+            const game = res.game;
             this.searchGame = Game.create(game);
         });
     }
@@ -71,9 +74,14 @@ export default class GameSearchResult extends Vue {
             if (res.status !== 200) return;
             this.similarGames = [];
             for (const game of res.games) {
+                if (this.isSearched(game)) continue;
                 this.similarGames.push(Game.create(game));
             }
         });
+    }
+
+    private isSearched(game: Game): boolean {
+        return game.id.toString() === this.$route.params.id.toString();
     }
 }
 
@@ -90,7 +98,7 @@ hr {
 }
 
 .image-desktop {
-    width: 300px;
+    width: 350px;
 }
 
 .image-mobile {
