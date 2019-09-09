@@ -4,18 +4,18 @@
             <div class="columns is-tablet">
                 <div class="column is-2">
                     <a :href="searchGame.url">
-                        <img class="is-hidden-touch" :src="searchGame.image">
-                        <img class="is-hidden-desktop" :src="searchGame.image">
+                        <img :class="d.respCls('image')" :src="searchGame.image">
                     </a>
                 </div>
                 <div class="column is-10 has-text-left">
-                    <h1 class="title is-3">
-                        <a  :href="searchGame.url" 
-                            class="has-text-primary title is-3">
+                    <p class="title is-size-3-desktop is-size-4-touch">
+                        <a :href="searchGame.url" class="has-text-primary">
                             {{searchGame.title}}
                         </a>
-                    </h1>
-                    <p class="title is-4 is-pulled-right">に似たゲーム</p>
+                    </p>
+                    <p class="title is-pulled-right is-size-4-desktop is-size-5-touch">
+                        に似たゲーム
+                    </p>
                 </div>
             </div>
         </section>
@@ -37,6 +37,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import GameContent from '@/components/GameContent.vue';
 import Game from '@/types/Game';
 import Api from '@/utils/Api';
+import Device from '@/utils/Device';
 
 const api = new Api();
 
@@ -49,6 +50,7 @@ export default class GameSearchResult extends Vue {
     public id: number = 0;
     public searchGame!: Game;
     public similarGames: Game[] = [];
+    public d = new Device();
 
     private created() {
         this.id = parseInt(this.$route.params.id);
@@ -67,7 +69,10 @@ export default class GameSearchResult extends Vue {
     private accessSimilarGames(id: number) {
         api.similarGamesFromId(id, (res: any) => {
             if (res.status !== 200) return;
-            this.similarGames = res.games;
+            this.similarGames = [];
+            for (const game of res.games) {
+                this.similarGames.push(Game.create(game));
+            }
         });
     }
 }
@@ -80,15 +85,15 @@ img {
 }
 
 hr {
-    width: 90%;
+    width: 95%;
     margin: 0 auto;
 }
 
-.is-hidden-touch {
-    width: 150px;
+.image-desktop {
+    width: 300px;
 }
 
-.is-hidden-desktop {
-    width: 300px;
+.image-mobile {
+    width: 200px;
 }
 </style>

@@ -1,10 +1,10 @@
 <template>
     <div class="container">
         <section class="section">
-            <h1 class="synopsis title is-3">
+            <h1 class="title is-size-3-desktop is-size-4-touch">
                 『{{ synopsis }}』
             </h1>
-            <p class="title is-4 is-pulled-right">
+            <p class="title is-pulled-right is-size-4-desktop is-size-5-touch">
                 というあらすじに近いゲーム
             </p>
         </section>
@@ -53,12 +53,8 @@ export default class SynopsisSearchResult extends Vue {
 </script>
 
 <style scoped>
-.synopsis {
-    padding: 0 30px;
-}
-
 hr {
-    width: 90%;
+    width: 95%;
     margin: 0 auto;
 }
 </style>
