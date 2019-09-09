@@ -77,13 +77,13 @@
           <p>18歳未満の方が利用することはできません。</p>
           <p>あなたは18歳以上ですか？</p>
           <div class="age-check-group">
-            <div class="is-hidden-touch">
-              <a class="button is-large is-pulled-left is-primary" @click="ageCheck">はい</a>
-              <a class="button is-large is-pulled-right" @click="closeAgeCheck">いいえ</a>
-            </div>
-            <div class="is-hidden-desktop">
-              <a class="button is-pulled-left is-primary" @click="ageCheck">はい</a>
-              <a class="button is-pulled-right" @click="closeAgeCheck">いいえ</a>
+            <div :class="{ 'mobile' : d.isMobile(), 'desktop' : !d.isMobile() }">
+              <a class="button is-pulled-left is-primary" 
+                :class="{'is-large desktop': !d.isMobile()}"
+                @click="ageCheck">はい</a>
+              <a class="button is-pulled-right" 
+                :class="{'is-large': !d.isMobile()}"
+                @click="closeAgeCheck">いいえ</a>
             </div>
           </div>
         </section>
@@ -229,11 +229,11 @@ $info: #ebdd1b; // accent color
   margin: 15px auto 0px auto;
 }
 
-.age-check-group > .is-hidden-touch {
+.age-check-group > .desktop {
   max-width: 340px;
 }
 
-.age-check-group > .is-hidden-desktop {
+.age-check-group > .mobile {
   max-width: 200px;
 }
 </style>
