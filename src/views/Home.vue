@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <img class="logo" alt="LOGO" src="../assets/logo_white_back.png">
-    <h4 class="subtitle is-4">エロゲ/ギャルゲAI検索サービス</h4>
+    <h4 class="subtitle is-size-4-desktop is-size-5-touch">エロゲ/ギャルゲAI検索サービス</h4>
     <GameSearch></GameSearch>
     <SynopsisSearch></SynopsisSearch>
   </div>
@@ -23,8 +23,8 @@ export default class Home extends Vue {}
 
 <style scoped>
   .logo {
-    width: 100%;
-    margin-top: 30px;
+    width: 90%;
+    margin-top: 60px;
     margin-bottom: 20px;
   }
 </style>

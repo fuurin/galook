@@ -16,7 +16,7 @@ export default class Api {
         const params = {
             brand: game.brand,
             category: game.category,
-            story: game.stroy,
+            story: game.story,
             subgenre: game.subgenre,
             title: game.title,
             writer: game.writer,

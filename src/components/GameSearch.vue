@@ -15,8 +15,7 @@
                     class="list-item has-text-left">
                     <small>
                         <router-link class="has-text-primary"
-                            :to="{name: 'game', params: {id: cand.id}}"
-                        >
+                            :to="{name: 'game', params: {id: cand.id}}">
                             {{ cand.title }}
                         </router-link>
                     </small>
