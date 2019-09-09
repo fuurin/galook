@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Game from '@/types/Game';
 
-const BASE_URL = "http://3.115.42.95/";
+const BASE_URL = "https://api.galook.net/";
 
 export default class Api {
     public similarGamesGromSynopsis(text: string, callback: (res: any) => void, limit: number = 20) {
@@ -35,7 +35,14 @@ export default class Api {
     }
 
     public gameTitleCandidates(text: string, callback: (res: any) => void, limit: number = 20) {
-        this.access("games", { text, limit }, callback);
+        // axios.get(BASE_URL + "games", {params: { text, limit }}).then(callback);
+        const res: any = {games: []};
+        for (let i = 0; i < 10; i++) {
+            res.games.push({ id: 786920, title: "神様お願い！お兄ちゃんの赤ちゃん妊娠したいの！ 〜ツンデレ妹＆清純妹とエッチなキセキでトラブル子作り三昧♪〜"});
+            res.games.push({ id: 754181, title: "妹4人と中出し性活！〜じゃれつき甘えにお世話♪妹たちとイチャイチャがとまらない！お兄ちゃんの精子は絶滅必至!?〜"});
+            res.games.push({ id: 814447, title: "お兄ちゃん、右手の使用を禁止します！"});
+        }
+        callback(res);
     }
 
     private access(endPointName: string, params: any, callback: (res: any) => void) {
