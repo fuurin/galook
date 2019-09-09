@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 const NO_IMAGE_URL = "/img/no-image.png";
 
 export default class Game {
@@ -25,18 +23,5 @@ export default class Game {
     public title: string,
     public url: string = "",
     public image: string = "",
-    public writer: string[] = []) {
-    this.checkImage(image);
-  }
-
-  private checkImage(url: string, noImgUrl: string = NO_IMAGE_URL) {
-    this.image = noImgUrl;
-    // try {
-    //   axios.get(url)
-    //   .then(() => { this.image = url; })
-    //   .catch(() => { this.image = noImgUrl; });
-    // } catch {
-    //   this.image = noImgUrl;
-    // }
-  }
+    public writer: string[] = []) {}
 }

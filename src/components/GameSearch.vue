@@ -53,6 +53,12 @@ export default class GameSearch extends Vue {
         }, ACCESS_INTERVAL);
     }
 
+    @Watch("$route")
+    private clear() {
+        this.searchText = "";
+        this.candidates = [];
+    }
+
     private empty(): boolean {
         return this.candidates.length > 0;
     }
@@ -65,14 +71,19 @@ export default class GameSearch extends Vue {
         this.candidates = [];
         if (!searchText) { return; }
         api.gameTitleCandidates(searchText, (res: any) => {
-            this.updateInterval(res.games);
+            this.update(res.games);
         }, this.numCandidates);
     }
 
-    private updateInterval(games: any) {
+    private update(games: any) {
         for (const game of games) {
+            if (this.isSearched(game)) continue;
             this.candidates.push(new GameCandidate(game.id, game.title));
         }
+    }
+
+    private isSearched(game: any): boolean {
+        return game.id === this.$route.params.id;
     }
 }
 
