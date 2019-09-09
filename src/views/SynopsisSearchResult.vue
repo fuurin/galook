@@ -46,7 +46,10 @@ export default class SynopsisSearchResult extends Vue {
     private accessSimilarGames(synopsis: string) {
         api.similarGamesGromSynopsis(synopsis, (res: any) => {
             if (res.status !== 200) return;
-            this.similarGames = res.games;
+            this.similarGames = [];
+            for (const game of res.games) {
+                this.similarGames.push(Game.create(game));
+            }
         });
     }
 }
