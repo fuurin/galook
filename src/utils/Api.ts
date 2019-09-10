@@ -4,7 +4,7 @@ import Game from '@/types/Game';
 const BASE_URL = "https://api.galook.net/";
 
 export default class Api {
-    public similarGamesGromSynopsis(text: string, callback: (res: any) => void, page: number = 0, limit: number = 20) {
+    public similarGamesFromSynopsis(text: string, callback: (res: any) => void, page: number = 0, limit: number = 20) {
         this.access("similar_games", { text, page, limit }, callback);
     }
 
