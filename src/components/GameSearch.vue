@@ -2,15 +2,17 @@
     <div>
         <div class="field">
             <div class="control has-icons-left">
-                <input class="input" type="text" placeholder="類似ゲームを検索" v-model="searchText">
+                <input v-model="searchText" class="input" type="search" 
+                    @keydown.enter="scroll"
+                    placeholder="類似ゲームを検索">
                 <span class="icon is-small is-left">
                     <i class="fas fa-search"></i>
                 </span>
             </div>
         </div>
         
-        <div class="search-result" v-show="empty()"
-            :class="{'search-result-touch': d.isMobile(), 'search-result-desktop': !d.isMobile()}">
+        <div class="search-result has-text-right" v-show="!empty()"
+            :class="d.respCls('search-result')">
             <div class="result-list list is-hoverable">
                 <div v-for="cand in candidates" :key="cand.id" 
                     class="list-item has-text-left">
@@ -54,6 +56,10 @@ export default class GameSearch extends Vue {
             this.access(this.searchText);
             this.accessTimer = null;
         }, ACCESS_INTERVAL);
+
+        if (this.searchText === "") {
+            this.candidates = [];
+        }
     }
 
     @Watch("$route")
@@ -62,12 +68,13 @@ export default class GameSearch extends Vue {
         this.candidates = [];
     }
 
-    private empty(): boolean {
-        return this.candidates.length > 0;
+    private scroll() {
+        if (!this.d.isMobile() || this.$route.name !== "home") return;
+        window.scrollTo({top: 170, behavior: "smooth"});
     }
 
-    private paged(): boolean {
-        return this.candidates.length >= this.numCandidates;
+    private empty(): boolean {
+        return this.candidates.length <= 0;
     }
 
     private access(searchText: string) {
@@ -83,6 +90,12 @@ export default class GameSearch extends Vue {
             if (this.isSearched(game)) continue;
             this.candidates.push(new GameCandidate(game.id, game.title));
         }
+
+        if (this.d.isMobile() && this.$route.name === "home" && !this.empty()) {
+            setTimeout(() => {
+                window.scrollTo({top: 170, behavior: "smooth"});
+            }, 100);
+        }
     }
 
     private isSearched(game: any): boolean {
@@ -94,16 +107,16 @@ export default class GameSearch extends Vue {
 
 <style scoped>
 .search-result {
-    overflow-y: scroll;
-    transform: translateZ(0); /* Retinaでは必要らしい？ */
     margin-bottom: 0.75rem;
+    overflow-y: scroll;
+    transform: translateZ(0); /* Retinaでは必要らしい？ */  
 }
 
 .search-result-desktop {
     height: 240px;
 }
 
-.search-result-touch {
-    height: 160px;
+.search-result-mobile {
+    height: 200px;
 }
 </style>
