@@ -42,6 +42,9 @@ import Game from '@/types/Game';
 import Api from '@/utils/Api';
 import Device from '@/utils/Device';
 
+const EACH_RESULT_NUM = 5;
+const MAX_RESULT_NUM = 10;
+
 const api = new Api();
 
 @Component({
@@ -50,15 +53,24 @@ const api = new Api();
   },
 })
 export default class GameSearchResult extends Vue {
-    public id: number = 0;
-    public searchGame!: Game;
-    public similarGames: Game[] = [];
-    public d = new Device();
+    private id: number = 0;
+    private searchGame!: Game;
+    private similarGames: Game[] = [];
+    private currentPage: number = 0;
+    private d = new Device();
 
     private created() {
         this.id = parseInt(this.$route.params.id);
         this.accessGame(this.id);
         this.accessSimilarGames(this.id);
+    }
+
+    private mounted() {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > document.body.clientHeight - window.innerHeight - 100) {
+                this.showMore();
+            }
+        });
     }
 
     private accessGame(id: number) {
@@ -69,19 +81,23 @@ export default class GameSearchResult extends Vue {
         });
     }
 
-    private accessSimilarGames(id: number) {
+    private accessSimilarGames(id: number, page: number = 0) {
         api.similarGamesFromId(id, (res: any) => {
             if (res.status !== 200) return;
-            this.similarGames = [];
             for (const game of res.games) {
                 if (this.isSearched(game)) continue;
                 this.similarGames.push(Game.create(game));
             }
-        });
+        }, this.currentPage, EACH_RESULT_NUM);
     }
 
     private isSearched(game: Game): boolean {
         return game.id.toString() === this.$route.params.id.toString();
+    }
+
+    private showMore() {
+        if (this.similarGames.length >= MAX_RESULT_NUM) return;
+        this.accessSimilarGames(this.id, ++this.currentPage);
     }
 }
 

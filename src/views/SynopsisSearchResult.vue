@@ -27,6 +27,9 @@ import GameContent from '@/components/GameContent.vue';
 import Game from '@/types/Game';
 import Api from '@/utils/Api';
 
+const EACH_RESULT_NUM = 5;
+const MAX_RESULT_NUM = 15;
+
 const api = new Api();
 
 @Component({
@@ -37,20 +40,33 @@ const api = new Api();
 export default class SynopsisSearchResult extends Vue {
     private synopsis!: string;
     private similarGames: Game[] = [];
+    private currentPage: number = 0;
 
     private created() {
         this.synopsis = this.$route.params.synopsis;
         this.accessSimilarGames(this.synopsis);
     }
 
-    private accessSimilarGames(synopsis: string) {
+    private mounted() {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > document.body.clientHeight - window.innerHeight - 100) {
+                this.showMore();
+            }
+        });
+    }
+
+    private accessSimilarGames(synopsis: string, page: number = 0) {
         api.similarGamesGromSynopsis(synopsis, (res: any) => {
             if (res.status !== 200) return;
-            this.similarGames = [];
             for (const game of res.games) {
                 this.similarGames.push(Game.create(game));
             }
-        });
+        }, page, EACH_RESULT_NUM);
+    }
+
+    private showMore() {
+        if (this.similarGames.length >= MAX_RESULT_NUM) return;
+        this.accessSimilarGames(this.synopsis, ++this.currentPage);
     }
 }
 </script>

@@ -4,15 +4,15 @@ import Game from '@/types/Game';
 const BASE_URL = "https://api.galook.net/";
 
 export default class Api {
-    public similarGamesGromSynopsis(text: string, callback: (res: any) => void, limit: number = 20) {
-        this.access("similar_games", { text, limit }, callback);
+    public similarGamesGromSynopsis(text: string, callback: (res: any) => void, page: number = 0, limit: number = 20) {
+        this.access("similar_games", { text, page, limit }, callback);
     }
 
-    public similarGamesFromId(id: number, callback: (res: any) => void, limit: number = 20) {
-        this.access("similar_games", { id, limit }, callback);
+    public similarGamesFromId(id: number, callback: (res: any) => void, page: number = 0, limit: number = 20) {
+        this.access("similar_games", { id, page, limit }, callback);
     }
 
-    public gamesFromInfo(game: Game, callback: (res: any) => void, limit: number = 20) {
+    public gamesFromInfo(game: Game, callback: (res: any) => void, page: number = 0, limit: number = 20) {
         const params = {
             brand: game.brand,
             category: game.category,
@@ -20,7 +20,7 @@ export default class Api {
             subgenre: game.subgenre,
             title: game.title,
             writer: game.writer,
-            limit,
+            page, limit,
         };
         this.access("games", params, callback);
     }
