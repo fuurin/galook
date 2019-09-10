@@ -39,6 +39,8 @@
       </div>
     </div>
 
+
+    <div class="is-hidden-touch" style="margin-bottom: 30px;"></div>
     <footer class="footer is-size-6-desktop is-size-7-touch">
       <p>
         ぎゃルック！ エロゲ/ギャルゲAI検索サービス 
@@ -177,7 +179,7 @@ $info: #ebdd1b; // accent color
 
 .main-container {
   margin-top: 50px;
-  margin-bottom: 65px;
+  margin-bottom: 35px;
   max-width: 1080px;
   padding: 0 20px;
 }

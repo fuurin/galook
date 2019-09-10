@@ -9,7 +9,8 @@
             </div>
         </div>
         
-        <div class="search-result" v-show="empty()">
+        <div class="search-result" v-show="empty()"
+            :class="{'search-result-touch': d.isMobile(), 'search-result-desktop': !d.isMobile()}">
             <div class="result-list list is-hoverable">
                 <div v-for="cand in candidates" :key="cand.id" 
                     class="list-item has-text-left">
@@ -29,9 +30,10 @@
 import { Component, Prop, Vue, Watch} from 'vue-property-decorator';
 import GameCandidate from '@/types/GameCandidate';
 import Api from '@/utils/Api';
+import Device from '@/utils/Device';
 
 const ACCESS_INTERVAL: number = 500; // ms
-const NUM_CANDIDATES: number = 50;
+const NUM_CANDIDATES: number = 50; // APIに渡すlimit数
 
 const api = new Api();
 
@@ -41,6 +43,7 @@ export default class GameSearch extends Vue {
     private accessTimer: number | null = null;
     private candidates: GameCandidate[] = [];
     private numCandidates: number = NUM_CANDIDATES;
+    private d: Device = new Device();
 
     @Watch("searchText")
     private onSearchTextChange() {
@@ -91,15 +94,16 @@ export default class GameSearch extends Vue {
 
 <style scoped>
 .search-result {
-    margin-bottom: 30px;
+    overflow-y: scroll;
+    transform: translateZ(0); /* Retinaでは必要らしい？ */
+    margin-bottom: 0.75rem;
 }
 
-.result-list {
-    margin-bottom: 15px;
+.search-result-desktop {
+    height: 240px;
 }
 
-.list-item {
-    max-width: 560px;
+.search-result-touch {
+    height: 160px;
 }
-
 </style>
