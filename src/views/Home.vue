@@ -4,6 +4,7 @@
     <h4 class="subtitle is-size-4-desktop is-size-5-touch">エロゲ/ギャルゲAI検索サービス</h4>
     <GameSearch></GameSearch>
     <SynopsisSearch></SynopsisSearch>
+    <DetailSearch></DetailSearch>
   </div>
 </template>
 
@@ -11,11 +12,13 @@
 import { Component, Vue } from 'vue-property-decorator';
 import GameSearch from '@/components/GameSearch.vue';
 import SynopsisSearch from '@/components/SynopsisSearch.vue';
+import DetailSearch from '@/components/DetailSearch.vue';
 
 @Component({
   components: {
     GameSearch,
     SynopsisSearch,
+    DetailSearch,
   },
 })
 export default class Home extends Vue {}

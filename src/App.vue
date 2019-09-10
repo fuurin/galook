@@ -39,8 +39,6 @@
       </div>
     </div>
 
-
-    <div class="is-hidden-touch" style="margin-bottom: 30px;"></div>
     <footer class="footer is-size-6-desktop is-size-7-touch">
       <p>
         ぎゃルック！ エロゲ/ギャルゲAI検索サービス 
@@ -61,6 +59,7 @@
           <section class="modal-card-body">
             <GameSearch></GameSearch>
             <SynopsisSearch></SynopsisSearch>
+            <DetailSearch></DetailSearch>
           </section>
           <footer class="modal-card-foot">
           </footer>
@@ -101,6 +100,7 @@
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import GameSearch from './components/GameSearch.vue';
 import SynopsisSearch from './components/SynopsisSearch.vue';
+import DetailSearch from './components/DetailSearch.vue';
 import Device from './utils/Device';
 import Cookies from 'js-cookie';
 
@@ -110,6 +110,7 @@ const AGE_CHECK_KEY = "galookAgeChecked";
   components: {
     GameSearch,
     SynopsisSearch,
+    DetailSearch,
   },
 })
 export default class Home extends Vue {
