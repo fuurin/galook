@@ -1,57 +1,44 @@
 import axios from 'axios';
-import Game from '@/types/Game';
+import GameQuery from '@/types/GameQuery';
 
 const BASE_URL = "https://api.galook.net/";
 
 export default class Api {
-    public similarGamesFromSynopsis(text: string, callback: (res: any) => void, page: number = 0, limit: number = 20) {
-        this.access("similar_games", { text, page, limit }, callback);
-    }
-
-    public similarGamesFromId(id: number, callback: (res: any) => void, page: number = 0, limit: number = 20) {
-        this.access("similar_games", { id, page, limit }, callback);
-    }
-
-    public gamesFromInfo(game: Game, callback: (res: any) => void, page: number = 0, limit: number = 20) {
-        const params = {
-            brand: game.brand,
-            category: game.category,
-            story: game.story,
-            subgenre: game.subgenre,
-            title: game.title,
-            writer: game.writer,
-            page, limit,
-        };
-        this.access("games", params, callback);
-    }
-
-    public game(id: number, callback: (res: any) => void) {
-        // 仮
-        const cb = (res: any) => {
-            res.game = res.games.filter((game: any) => game.id === id)[0];
-            callback(res);
-        };
-        this.access("games/" + id.toString(), {}, cb);
-    }
-
     public gameTitleCandidates(text: string, callback: (res: any) => void, limit: number = 20) {
         // axios.get(BASE_URL + "games", {params: { text, limit }}).then(callback);
         const res: any = {games: []};
-        for (let i = 0; i < 10; i++) {
-            res.games.push({ id: 786920, title: "神様お願い！お兄ちゃんの赤ちゃん妊娠したいの！ 〜ツンデレ妹＆清純妹とエッチなキセキでトラブル子作り三昧♪〜"});
-            res.games.push({ id: 754181, title: "妹4人と中出し性活！〜じゃれつき甘えにお世話♪妹たちとイチャイチャがとまらない！お兄ちゃんの精子は絶滅必至!?〜"});
-            res.games.push({ id: 814447, title: "お兄ちゃん、右手の使用を禁止します！"});
+        for (let i = 0; i < 5; i++) {
+            for (const game of exampleResponce.games) {
+                res.games.push({ id: game.id, title: game.title});
+            }
         }
         callback(res);
     }
 
-    private access(endPointName: string, params: any, callback: (res: any) => void) {
+    public similarGamesFromSynopsis(text: string, callback: (res: any) => void, page: number = 0, limit: number = 20) {
+        this.search("similar_games", { text, page, limit }, callback);
+    }
+
+    public similarGamesFromId(id: number, callback: (res: any) => void, page: number = 0, limit: number = 20) {
+        this.search("similar_games", { id, page, limit }, callback);
+    }
+
+    public gamesFromInfo(queries: GameQuery[], callback: (res: any) => void, page: number = 0, limit: number = 20) {
+        const query = queries.reduce((acc, q) => Object.assign(acc, q.query(), {}));
+        this.search("games", { query, page, limit }, callback);
+    }
+
+    public game(id: number, callback: (res: any) => void) {
+        const cb = (res: any) => {
+            res.game = res.games.filter((game: any) => game.id === id)[0];
+            callback(res);
+        };
+        this.search("games/" + id.toString(), {}, cb);
+    }
+
+    private search(endPointName: string, params: any, callback: (res: any) => void) {
         // axios.get(BASE_URL + endPointName, { params }).then(callback);
-        const re = Object.assign({}, exampleResponce);
-        if (params.limit) {
-            re.games = re.games.slice(0, params.limit);
-        }
-        callback(re);
+        callback(Object.assign({}, exampleResponce));
     }
 }
 

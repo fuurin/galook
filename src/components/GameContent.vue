@@ -75,7 +75,7 @@ export default class GameContent extends Vue {
     private d: Device = new Device();
 
     private isSearched(): boolean {
-        if (this.$route.name === "synopsis") return false;
+        if (this.$route.name !== "game") return false;
         return this.game.id.toString() === this.$route.params.id.toString();
     }
 

@@ -21,12 +21,14 @@
                             </div>
                             <div class="column is-6">
                                 <div class="buttons has-addons is-centered">
-                                    <span @click="detail.match='perfect'"
-                                        class="button" :class="{'is-primary is-selected': detail.match === 'perfect'}">
+                                    <span @click="detail.match=match.perfect"
+                                        class="button"
+                                        :class="{'is-primary is-selected': detail.match === match.perfect}">
                                         完全一致
                                     </span>
-                                    <span @click="detail.match='part'"
-                                        class="button" :class="{'is-success is-selected': detail.match === 'part'}">
+                                    <span @click="detail.match=match.part"
+                                        class="button"
+                                        :class="{'is-success is-selected': detail.match === match.part}">
                                         部分一致
                                     </span>
                                 </div>
@@ -47,17 +49,20 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import GameQuery from '@/types/GameQuery';
+import GameDetail from '@/types/GameDetail';
 import Device from '@/utils/Device';
 
 @Component
 export default class DetailSearch extends Vue {
     private isShown: boolean = false;
     private d: Device = new Device();
-    private details = [
-        { name: "brand", label: "ブランド", input: "", match: "perfect" },
-        { name: "category", label: "カテゴリー", input: "", match: "perfect" },
-        { name: "genre", label: "ジャンル", input: "", match: "perfect" },
-        { name: "writer", label: "ライター", input: "", match: "perfect" },
+    private match = GameQuery.match;
+    private details: GameDetail[] = [
+        new GameDetail("ブランド", new GameQuery("brand", "")),
+        new GameDetail("カテゴリー", new GameQuery("category", "")),
+        new GameDetail("ジャンル", new GameQuery("genre", "")),
+        new GameDetail("ライター", new GameQuery("writer", "")),
     ];
 
     private open() {
@@ -81,7 +86,7 @@ export default class DetailSearch extends Vue {
         for (const detail of this.details) {
             if (detail.input === "") continue;
             q[detail.name] = detail.input;
-            q[detail.name + '_match'] = detail.match;
+            q[detail.query().qmatch] = detail.match;
         }
         return q;
     }

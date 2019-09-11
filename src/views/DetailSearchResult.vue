@@ -26,6 +26,8 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import GameContent from '@/components/GameContent.vue';
 import Game from '@/types/Game';
+import GameQuery from '@/types/GameQuery';
+import GameDetail from '@/types/GameDetail';
 import Api from '@/utils/Api';
 
 const EACH_RESULT_NUM = 5;
@@ -39,13 +41,12 @@ const api = new Api();
     },
 })
 export default class DetailSearchResult extends Vue {
-    private details = [
-        { name: "brand", label: "ブランド", input: "", match: "perfect" },
-        { name: "category", label: "カテゴリー", input: "", match: "perfect" },
-        { name: "genre", label: "ジャンル", input: "", match: "perfect" },
-        { name: "writer", label: "ライター", input: "", match: "perfect" },
+    private details: GameDetail[] = [
+        new GameDetail("ブランド", new GameQuery("brand", "")),
+        new GameDetail("カテゴリー", new GameQuery("category", "")),
+        new GameDetail("ジャンル", new GameQuery("genre", "")),
+        new GameDetail("ライター", new GameQuery("writer", "")),
     ];
-    private searchGame: Game = new Game();
     private games: Game[] = [];
     private currentPage: number = 0;
 
@@ -54,7 +55,7 @@ export default class DetailSearchResult extends Vue {
         for (const detail of this.details) {
             if (!this.$route.query[detail.name]) continue;
             detail.input = this.$route.query[detail.name].toString();
-            detail.match = this.$route.query[detail.name + "_match"].toString();
+            detail.match = this.$route.query[detail.query().qmatch].toString();
         }
         this.searchGames();
     }
@@ -67,18 +68,19 @@ export default class DetailSearchResult extends Vue {
         });
     }
 
-    private titleRow(detail: any) {
-        if (!detail.input || !detail.label) return;
-        return detail.label + "：" + detail.input;
-    }
-
     private searchGames(page: number = 0) {
-        api.gamesFromInfo(this.searchGame, (res: any) => {
+        const queries = this.details.map((d) => d.query());
+        api.gamesFromInfo(queries, (res: any) => {
             if (res.status !== 200) return;
             for (const game of res.games) {
                 this.games.push(Game.create(game));
             }
         }, page, EACH_RESULT_NUM);
+    }
+
+    private titleRow(detail: GameDetail) {
+        if (!detail.input || !detail.label) return;
+        return detail.label + "：" + detail.input;
     }
 
     private showMore() {
