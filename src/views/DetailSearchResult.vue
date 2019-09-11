@@ -12,6 +12,10 @@
         
         <hr>
 
+        <div class="section is-size-5" v-if="games.length === 0">
+            該当するゲームが見つかりませんでした。
+        </div>
+
         <section class="section">
             <GameContent
                 v-for="game in games"

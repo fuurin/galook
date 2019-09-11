@@ -11,6 +11,10 @@
         
         <hr>
 
+        <div class="section is-size-5" v-if="similarGames.length === 0">
+            該当するゲームが見つかりませんでした。
+        </div>
+
         <section class="section">
             <GameContent
                 v-for="game in similarGames"
@@ -44,7 +48,7 @@ export default class SynopsisSearchResult extends Vue {
 
     private created() {
         this.synopsis = this.$route.params.synopsis;
-        this.accessSimilarGames(this.synopsis);
+        // this.accessSimilarGames(this.synopsis);
     }
 
     private mounted() {
