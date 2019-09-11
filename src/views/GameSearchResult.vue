@@ -1,7 +1,10 @@
 <template>
     <div>
         <section class="section">
-            <div class="columns is-tablet">
+            <div v-if="!searchGame">
+                <p class="is-size-5">ID: {{ id }}のゲームは見つかりませんでした。</p>
+            </div>
+            <div v-else class="columns is-tablet">
                 <div class="column is-3">
                     <a :href="searchGame.url">
                         <img :class="d.respCls('image')" :src="searchGame.image">
@@ -25,11 +28,10 @@
         
         <hr>
 
-        <div class="section is-size-5" v-if="similarGames.length === 0">
-            該当するゲームが見つかりませんでした。
-        </div>
-
         <section class="section">
+            <div v-if="similarGames.length === 0">
+                <p class="is-size-5">該当するゲームが見つかりませんでした。</p>
+            </div>
             <GameContent
                 v-for="game in similarGames"
                 :game="game"
@@ -58,7 +60,7 @@ const api = new Api();
 })
 export default class GameSearchResult extends Vue {
     private id: number = 0;
-    private searchGame!: Game;
+    private searchGame: Game | null = null;
     private similarGames: Game[] = [];
     private currentPage: number = 0;
     private d = new Device();
@@ -79,9 +81,7 @@ export default class GameSearchResult extends Vue {
 
     private accessGame(id: number) {
         api.game(id, (res: any) => {
-            // const game = res.game;
-            const game = res.game;
-            this.searchGame = Game.create(game);
+            this.searchGame = Game.create(res.game);
         });
     }
 
