@@ -6,12 +6,7 @@
             </div>
             <div v-else class="columns is-tablet">
                 <div class="column is-3">
-                    <a :href="searchGame.url">
-                        <img :class="d.respCls('image')" :src="searchGame.image">
-                    </a>
-                    <div class="has-text-right">
-                        <small class="is-size-7 has-text-grey">Image from Google</small>
-                    </div>
+                    <Affiliate :game="searchGame"></Affiliate>
                 </div>
                 <div class="column is-9 has-text-left">
                     <p class="title is-size-3-desktop is-size-4-touch">
@@ -44,6 +39,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import GameContent from '@/components/GameContent.vue';
+import Affiliate from '@/components/Affiliate.vue';
 import Game from '@/types/Game';
 import Api from '@/utils/Api';
 import Device from '@/utils/Device';
@@ -56,6 +52,7 @@ const api = new Api();
 @Component({
   components: {
     GameContent,
+    Affiliate,
   },
 })
 export default class GameSearchResult extends Vue {

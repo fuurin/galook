@@ -3,12 +3,7 @@
         <div class="card-content" @click="closeDetail">
             <div class="columns">
                 <div class="column is-3">
-                    <a :href="game.url">
-                        <img :class="d.respCls('image')" :src="game.image">
-                    </a>
-                    <div class="has-text-right">
-                        <small class="is-size-7 has-text-grey">Image from Google</small>
-                    </div>
+                    <Affiliate :game="game"></Affiliate>
                 </div>
                 <div class="column is-9">
                     <div class="has-text-left">
@@ -63,10 +58,15 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import Affiliate from '@/components/Affiliate.vue';
 import Game from '@/types/Game';
 import Device from '@/utils/Device';
 
-@Component
+@Component({
+    components: {
+        Affiliate,
+    },
+})
 export default class GameContent extends Vue {
     @Prop()
     private game!: Game;

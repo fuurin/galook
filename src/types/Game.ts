@@ -23,5 +23,10 @@ export default class Game {
     public title: string,
     public url: string = "",
     public image: string = "",
-    public writer: string[] = []) {}
+    public writer: string[] = [],
+    affiliate: boolean = true) {
+      if (affiliate) {
+        this.url = `http://www.getchu.com/api/geturl.phtml/af/2/aftype/1/sid/46/id/${id}/url/soft.phtml-/?id=${id}`;
+      }
+    }
 }
