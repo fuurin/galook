@@ -10,6 +10,8 @@ export default class Game {
       game.subgenre || [],
       game.title,
       game.url || "",
+      game.price || NaN,
+      game.release || "",
       game.image || NO_IMAGE_URL,
       game.writer || []);
   }
@@ -22,6 +24,8 @@ export default class Game {
     public subgenre: string[] = [],
     public title: string,
     public url: string = "",
+    public price: number = NaN,
+    public release: string = "",
     public image: string = "",
     public writer: string[] = [],
     affiliate: boolean = true) {

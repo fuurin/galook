@@ -23,7 +23,7 @@
             
             <span class="DefiAuthor" style="line-height:140%">
                 <span style="color:#000000;">
-                    発売日：2011/05/25
+                    発売日：{{ game.release }}
                 </span>
             </span>
             <br>
@@ -31,7 +31,7 @@
             <span class="DefiPrice" style="line-height:140%">
                 価格：
                 <span style="font-weight: bold;color:#CC0000;">
-                    ￥6,701
+                    ￥{{ game.price.toLocaleString() }}
                 </span>
             </span>
             <br>
