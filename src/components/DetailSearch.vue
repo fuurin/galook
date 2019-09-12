@@ -1,10 +1,10 @@
 <template>
     <div class="main">
         <a v-if="!isShown" class="button show" @click="open">
-            <i class="fas fa-plus"></i>詳細検索
+            <i class="fas fa-plus"></i>&nbsp;詳細検索
         </a>
         <a v-else class="button close" @click="close">
-            <i class="fas fa-minus"></i>閉じる
+            <i class="fas fa-minus"></i>&nbsp;閉じる
         </a>
 
         <transition>
