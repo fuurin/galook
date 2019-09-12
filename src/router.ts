@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import Home from './views/Home.vue';
 import GameSearchResult from './views/GameSearchResult.vue';
 import SynopsisSearchResult from './views/SynopsisSearchResult.vue';
+import DetailSearchResult from './views/DetailSearchResult.vue';
 
 Vue.use(Router);
 
@@ -24,6 +25,11 @@ export default new Router({
       path: '/synopsis/:synopsis',
       name: 'synopsis',
       component: SynopsisSearchResult,
+    },
+    {
+      path: '/detail',
+      name: 'detail',
+      component: DetailSearchResult,
     },
   ],
 });
