@@ -13,6 +13,3 @@ def create_app():
     api.add_resource(Games, '/games')
 
     return app
-
-
-app = create_app()
