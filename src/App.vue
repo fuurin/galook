@@ -1,27 +1,34 @@
 <template>
   <div id="app">
     <nav class="navbar is-fixed-top has-background-primary level is-mobile">
-      <div class="level-left has-text-left">
-        <div class="level-item">
+      <div class="level-left">
+        <div class="level-item has-text-left">
           <router-link to="/">
-            <img class="head-logo" src="./assets/logo_white.png" alt="logo">
+            <img src="./assets/logo_white.png" :class="d.respCls('head-logo')" alt="logo">
           </router-link>
         </div>
       </div>
       <div class="level-right">
-        <div class="level-item">
-          <a v-if="$route.path !== '/'" class="button" @click="openModal">
-            <i class="fas fa-search"></i>検索
-          </a>
+        <div class="level-item has-text-right search-button">
+          <transition>
+            <div v-if="$route.path !== '/'">
+              <a class="button" :class="{'is-small': d.isMobile()}" @click="openModal">
+                <i class="fas fa-search"></i>検索
+              </a>
+            </div>
+          </transition>
         </div>
       </div>
     </nav>
+
+    <div class="is-hidden-touch" style="margin-top: 40px;"></div>
     <div class="container main-container" v-if="galookAgeChecked">
       <transition mode="out-in">
-        <router-view/>
+        <router-view :key="componentKey"/>
       </transition>
     </div>
-    <div class="container" v-else>
+    
+    <div class="section" v-else>
       <div class="hero">
         <div class="hero-body">
           <div class="container">
@@ -31,8 +38,13 @@
         </div>
       </div>
     </div>
-    <footer class="footer">
-      <p>ぎゃルック！ エロゲ/ギャルゲAI検索サービス by Noimin, fuurin (2019)</p>
+
+    <footer class="footer is-size-6-desktop is-size-7-touch">
+      <p>
+        ぎゃルック！ エロゲ/ギャルゲAI検索サービス 
+        <br class="is-hidden-desktop"> 
+        by Noimin, fuurin (2019)
+      </p>
       <p>Powered by <a href="http://www.getchu.com/">Getchu.com</a></p>
     </footer>
 
@@ -47,6 +59,7 @@
           <section class="modal-card-body">
             <GameSearch></GameSearch>
             <SynopsisSearch></SynopsisSearch>
+            <DetailSearch></DetailSearch>
           </section>
           <footer class="modal-card-foot">
           </footer>
@@ -64,12 +77,14 @@
           <p>本サイトはアダルトコンテンツを掲載しております。</p>
           <p>18歳未満の方が利用することはできません。</p>
           <p>あなたは18歳以上ですか？</p>
-          <div class="level age-check-buttons is-mobile">
-            <div class="level-left has-text-centered">
-              <a class="button is-primary is-large" @click="ageCheck">はい</a>              
-            </div>
-            <div class="level-right has-text-centered">
-              <a class="button is-large" @click="closeAgeCheck">いいえ</a>
+          <div class="age-check-group">
+            <div :class="{ 'mobile' : d.isMobile(), 'desktop' : !d.isMobile() }">
+              <a class="button is-pulled-left is-primary" 
+                :class="{'is-large desktop': !d.isMobile()}"
+                @click="ageCheck">はい</a>
+              <a class="button is-pulled-right" 
+                :class="{'is-large': !d.isMobile()}"
+                @click="closeAgeCheck">いいえ</a>
             </div>
           </div>
         </section>
@@ -85,6 +100,8 @@
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import GameSearch from './components/GameSearch.vue';
 import SynopsisSearch from './components/SynopsisSearch.vue';
+import DetailSearch from './components/DetailSearch.vue';
+import Device from './utils/Device';
 import Cookies from 'js-cookie';
 
 const AGE_CHECK_KEY = "galookAgeChecked";
@@ -93,12 +110,15 @@ const AGE_CHECK_KEY = "galookAgeChecked";
   components: {
     GameSearch,
     SynopsisSearch,
+    DetailSearch,
   },
 })
 export default class Home extends Vue {
+  private componentKey = 0;
   private galookAgeChecked: boolean = false;
   private ageCheckOpened: boolean = true;
   private modalOpened: boolean = false;
+  private d = new Device();
 
   private created() {
     const checked = Cookies.get(AGE_CHECK_KEY);
@@ -109,8 +129,10 @@ export default class Home extends Vue {
   }
 
   @Watch('$route')
-  private routeUpdate() {
+  private routeUpdate(to: any, from: any) {
+    window.scrollTo({top: 0, behavior: "smooth"});
     this.closeModal();
+    this.componentKey += 1;
   }
 
   private ageCheck() {
@@ -157,6 +179,9 @@ $info: #ebdd1b; // accent color
 }
 
 .main-container {
+  margin-top: 50px;
+  margin-bottom: 35px;
+  max-width: 1080px;
   padding: 0 20px;
 }
 
@@ -167,29 +192,24 @@ $info: #ebdd1b; // accent color
   opacity: 0.2;
 }
 
-.head-logo {
-  width: 40%;
+.head-logo-desktop {
+  width: 230px;
+  margin: 6px 0 6px 20px;
 }
 
-.level-left {
-  margin: 4px 0px 6px 8px;
-  max-width: 200px;
+.head-logo-mobile {
+  width: 180px;
+  margin-left: 10px;
 }
 
-.level-right {
-  margin-right: 16px;
-}
-
-.container {
-  margin-top: 100px;
-  margin-bottom: 100px;
+.search-button {
+  margin-right: 20px;
 }
  
 .footer {
   margin-top: auto;
   padding: 24px;
 }
-
 
 .modal-enter-active {
   transition: opacity .2s;
@@ -208,8 +228,15 @@ $info: #ebdd1b; // accent color
   padding: 0 20px;
 }
 
-.age-check-buttons {
-  width: 350px;
+.age-check-group > div {
   margin: 15px auto 0px auto;
+}
+
+.age-check-group > .desktop {
+  max-width: 340px;
+}
+
+.age-check-group > .mobile {
+  max-width: 200px;
 }
 </style>
