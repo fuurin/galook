@@ -94,7 +94,7 @@ class GetchuSpider(scrapy.Spider):
             elif field_name == 'writer':
                 field_value = field_values
             elif field_name == 'subgenre' or field_name == 'category':
-                field_value = [value for value in field_values if value != '[一覧]']
+                field_value = list(filter(lambda value: value != '[一覧]', field_values))
             elif field_name == 'price':
                 field_value = int(field_values[0].replace(',', '').split('(')[0][1:])
             elif field_name == 'release_date':
