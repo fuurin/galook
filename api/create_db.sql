@@ -1,15 +1,18 @@
 CREATE TABLE games (
-    id SERIAL,
-    title TEXT NOT NULL,
-    brand TEXT,
-    story TEXT,
-    PRIMARY KEY(id)
-);
+     id INT, -- ゲームを識別するための連番
+     title TEXT NOT NULL, -- ゲームタイトル
+     brand TEXT, -- ブランド
+     story TEXT, -- あらすじ
+     standard_edition_id INT REFERENCES editions(id), -- 代表エディションの id
+     PRIMARY KEY(id)
+ );
 
 CREATE TABLE editions (
     id INT, 
     game_id INT REFERENCES games(id), 
     title TEXT NOT NULL,
+    brand TEXT,
+    story TEXT,
     price INT,
     release_date DATE,
     url TEXT, 
