@@ -31,22 +31,43 @@ class PostgresPipeline(object):
     def process_item(self, item, spider):
         # editions テーブル
         sql = textwrap.dedent("""\
-        INSERT INTO editions (id, title, brand, price, release_date, url, story) \
+        INSERT INTO editions (id, title, brand, price, release_date, story, url) \
         VALUES (%s, %s, %s, %s, %s, %s, %s);\
         """)
         curs = self.conn.cursor()
         curs.execute(
             sql, (
                 item['id'], item['title'], item['brand'], item['price'], 
-                item['release_date'], item['url'], item['story']
+                item['release_date'], item['story'], item['url']
             )
         )
 
         # categories テーブル
+        for category in item['category']:
+            sql = textwrap.dedent("""\
+            INSERT INTO categories (edition_id, category_name) \
+            VALUES (%s, %s);\
+            """)
+            curs = self.conn.cursor()
+            curs.execute(sql, (item['id'], category))
 
         # subgenres テーブル
+        for subgenre in item['subgenre']:
+            sql = textwrap.dedent("""\
+            INSERT INTO subgenres (edition_id, subgenre_name) \
+            VALUES (%s, %s);\
+            """)
+            curs = self.conn.cursor()
+            curs.execute(sql, (item['id'], subgenre))
 
-        # writers テーブル
+        # # writers テーブル
+        for writer in item['writer']:
+            sql = textwrap.dedent("""\
+            INSERT INTO writers (edition_id, writer_name) \
+            VALUES (%s, %s);\
+            """)
+            curs = self.conn.cursor()
+            curs.execute(sql, (item['id'], writer))
 
         self.conn.commit()
 
