@@ -22,3 +22,5 @@ yarn-error.log*
 *.sw?
 
 credentials.csv
+
+/crawler/galook/.scrapy/

@@ -33,7 +33,7 @@ class PostgresPipeline(object):
         sql = "SELECT id FROM editions WHERE id = %s;"
         curs = self.conn.cursor()
         curs.execute(sql, (item['id'], ))
-        if curs.fetchone():
+        if curs.fetchone() is not None:
             return item
 
         # editions テーブル
@@ -76,14 +76,18 @@ class PostgresPipeline(object):
             curs = self.conn.cursor()
             curs.execute(sql, (item['id'], writer))
 
-        # games テーブル
+        # games テーブル・editions テーブルの game_id 列
         if item['story']:
             sql = textwrap.dedent("""\
-            SELECT standard_edition_id FROM games WHERE story = %s;
+            SELECT id, standard_edition_id FROM games WHERE story = %s;
             """)
             curs = self.conn.cursor()
             curs.execute(sql, (item['story'], ))
-            standard_id = curs.fetchone()
+            row = curs.fetchone()
+            if row is None:
+                standard_id = None
+            else:
+                game_id, standard_id = row
         else:
             standard_id = None
         if not standard_id:
@@ -97,7 +101,23 @@ class PostgresPipeline(object):
                     item['title'], item['brand'], item['story'], item['id']
                 )
             )
+
+            sql = textwrap.dedent("""\
+            UPDATE editions \
+            SET game_id = (SELECT MAX(id) FROM games)\
+            WHERE id = %s;
+            """)
+            curs = self.conn.cursor()
+            curs.execute(sql, (item['id'], ))
         else:
+            sql = textwrap.dedent("""\
+            UPDATE editions \
+            SET game_id = %s\
+            WHERE id = %s;
+            """)
+            curs = self.conn.cursor()
+            curs.execute(sql, (game_id, item['id']))
+
             sql = textwrap.dedent("""\
             SELECT price FROM editions WHERE id = %s;
             """)
