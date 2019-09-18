@@ -49,7 +49,7 @@ class GetchuSpider(scrapy.Spider):
         url_params = urllib.parse.parse_qs(older_url)
         year = int(url_params['year'][0])
         month = int(url_params['month'][0])
-        if year < self.start_year or (year == self.start_year and month < self.start_moth):
+        if year < self.start_year or (year == self.start_year and month < self.start_month):
             return  
 
         yield scrapy.Request(older_url)
@@ -96,7 +96,10 @@ class GetchuSpider(scrapy.Spider):
             elif field_name == 'subgenre' or field_name == 'category':
                 field_value = list(filter(lambda value: value != '[一覧]', field_values))
             elif field_name == 'price':
-                field_value = int(field_values[0].replace(',', '').split('(')[0][1:])
+                try:
+                    field_value = int(field_values[0].replace(',', '').split('(')[0][1:])
+                except ValueError:
+                    field_value = -1
             elif field_name == 'release_date':
                 year, month, day = map(int, field_values[0].split('/'))
                 field_value = datetime.date(year, month, day);
