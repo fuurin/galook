@@ -9,7 +9,7 @@ CREATE TABLE games (
 
  CREATE TABLE editions (
      id INT, -- getchu.com の販売ページ URL などに含まれる ID
-     game_id INT REFERENCES games(id),  -- このedition が含まれる game の　ID
+     game_id INT,   -- このedition が含まれる game の　ID
      title TEXT NOT NULL, -- edition ごとのタイトル
      brand TEXT, -- ブランド
      story TEXT, -- あらすじ
