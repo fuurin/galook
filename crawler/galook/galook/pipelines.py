@@ -26,10 +26,10 @@ class PostgresPipeline(object):
         )
 
     def close_spider(self, spider: scrapy.Spider):
-        self.conn.close()
+        pass
 
     def process_item(self, item, spider):
-        # editions テーブル
+        # # editions テーブル
         sql = textwrap.dedent("""\
         INSERT INTO editions (id, title, brand, price, release_date, story, url) \
         VALUES (%s, %s, %s, %s, %s, %s, %s);\
@@ -42,7 +42,7 @@ class PostgresPipeline(object):
             )
         )
 
-        # categories テーブル
+        # # categories テーブル
         for category in item['category']:
             sql = textwrap.dedent("""\
             INSERT INTO categories (edition_id, category_name) \
@@ -51,7 +51,7 @@ class PostgresPipeline(object):
             curs = self.conn.cursor()
             curs.execute(sql, (item['id'], category))
 
-        # subgenres テーブル
+        # # subgenres テーブル
         for subgenre in item['subgenre']:
             sql = textwrap.dedent("""\
             INSERT INTO subgenres (edition_id, subgenre_name) \
@@ -69,6 +69,41 @@ class PostgresPipeline(object):
             curs = self.conn.cursor()
             curs.execute(sql, (item['id'], writer))
 
+        # games テーブル
+        if item['story']:
+            sql = textwrap.dedent("""\
+            SELECT standard_edition_id FROM games WHERE story = %s;
+            """)
+            curs = self.conn.cursor()
+            curs.execute(sql, (item['story'], ))
+            standard_id = curs.fetchone()
+            if not standard_id:
+                sql = textwrap.dedent("""\
+                INSERT INTO games (title, brand, story, standard_edition_id) \
+                VALUES (%s, %s, %s, %s);\
+                """)
+                curs = self.conn.cursor()
+                curs.execute(
+                    sql, (
+                        item['title'], item['brand'], item['story'], item['id']
+                    )
+                )
+            else:
+                sql = textwrap.dedent("""\
+                SELECT price FROM editions WHERE id = %s;
+                """)
+                curs = self.conn.cursor()
+                curs.execute(sql, (standard_id, ))
+                standard_price = curs.fetchone()
+                if item['price'] < price or (item['price'] == price and item['id'] < standard_id):
+                    sql = textwrap.dedent("""\
+                    UPDATE games \
+                    SET standard_edition_id = %s\
+                    WHERE standard_edition_id = %s;
+                    """)
+                    curs = self.conn.cursor()
+                    curs.execute(sql, (item['id'], standard_id))
+        
         self.conn.commit()
 
         return item

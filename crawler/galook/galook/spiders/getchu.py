@@ -24,10 +24,10 @@ class GetchuSpider(scrapy.Spider):
 
     def __init__(self, end_year, end_month, start_year=1990, start_month=1):
         self.start_urls = [f'http://www.getchu.com/all/price.html?aurl=http://www.getchu.com/all/price.html?genre=pc_soft&gage=adult&month={end_month}&year={end_year}&genre=pc_soft&gc=gc']
-        self.end_year = end_year
-        self.end_month = end_month
-        self.start_year = start_year
-        self.start_month = start_month
+        self.end_year = int(end_year)
+        self.end_month = int(end_month)
+        self.start_year = int(start_year)
+        self.start_month = int(start_month)
 
     def parse(self, response):
         """
