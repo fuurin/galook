@@ -29,7 +29,14 @@ class PostgresPipeline(object):
         pass
 
     def process_item(self, item, spider):
-        # # editions テーブル
+        # 存在判定
+        sql = "SELECT id FROM editions WHERE id = %s;"
+        curs = self.conn.cursor()
+        curs.execute(sql, (item['id'], ))
+        if curs.fetchone():
+            return item
+
+        # editions テーブル
         sql = textwrap.dedent("""\
         INSERT INTO editions (id, title, brand, price, release_date, story, url) \
         VALUES (%s, %s, %s, %s, %s, %s, %s);\
@@ -77,32 +84,34 @@ class PostgresPipeline(object):
             curs = self.conn.cursor()
             curs.execute(sql, (item['story'], ))
             standard_id = curs.fetchone()
-            if not standard_id:
-                sql = textwrap.dedent("""\
-                INSERT INTO games (title, brand, story, standard_edition_id) \
-                VALUES (%s, %s, %s, %s);\
-                """)
-                curs = self.conn.cursor()
-                curs.execute(
-                    sql, (
-                        item['title'], item['brand'], item['story'], item['id']
-                    )
+        else:
+            standard_id = None
+        if not standard_id:
+            sql = textwrap.dedent("""\
+            INSERT INTO games (title, brand, story, standard_edition_id) \
+            VALUES (%s, %s, %s, %s);\
+            """)
+            curs = self.conn.cursor()
+            curs.execute(
+                sql, (
+                    item['title'], item['brand'], item['story'], item['id']
                 )
-            else:
+            )
+        else:
+            sql = textwrap.dedent("""\
+            SELECT price FROM editions WHERE id = %s;
+            """)
+            curs = self.conn.cursor()
+            curs.execute(sql, (standard_id, ))
+            standard_price = curs.fetchone()[0]
+            if (item['price'] != -1 and item['price'] < standard_price) or (item['price'] == standard_price and item['id'] < standard_id):
                 sql = textwrap.dedent("""\
-                SELECT price FROM editions WHERE id = %s;
+                UPDATE games \
+                SET standard_edition_id = %s\
+                WHERE standard_edition_id = %s;
                 """)
                 curs = self.conn.cursor()
-                curs.execute(sql, (standard_id, ))
-                standard_price = curs.fetchone()
-                if item['price'] < price or (item['price'] == price and item['id'] < standard_id):
-                    sql = textwrap.dedent("""\
-                    UPDATE games \
-                    SET standard_edition_id = %s\
-                    WHERE standard_edition_id = %s;
-                    """)
-                    curs = self.conn.cursor()
-                    curs.execute(sql, (item['id'], standard_id))
+                curs.execute(sql, (item['id'], standard_id))
         
         self.conn.commit()
 
