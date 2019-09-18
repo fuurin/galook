@@ -9,7 +9,6 @@ verify_ssl = true
 scrapy = "*"
 scrapy-splash = "*"
 psycopg2-binary = "*"
-urlparse = "*"
 
 [requires]
 python_version = "3.7"
