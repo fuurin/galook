@@ -1,12 +1,3 @@
-CREATE TABLE games (
-     id SERIAL, -- ゲームを識別するための連番
-     title TEXT NOT NULL, -- ゲームタイトル
-     brand TEXT, -- ブランド
-     story TEXT, -- あらすじ
-     standard_edition_id INT REFERENCES editions(id), -- 代表エディションの id
-     PRIMARY KEY(id)
- );
-
  CREATE TABLE editions (
      id INT, -- getchu.com の販売ページ URL などに含まれる ID
      game_id INT,   -- このedition が含まれる game の　ID
@@ -16,6 +7,15 @@ CREATE TABLE games (
      price INT, -- 販売価格
      release_date DATE, -- 発売日
      url TEXT, -- edition ごとの販売ページ URL
+     PRIMARY KEY(id)
+ );
+
+CREATE TABLE games (
+     id SERIAL, -- ゲームを識別するための連番
+     title TEXT NOT NULL, -- ゲームタイトル
+     brand TEXT, -- ブランド
+     story TEXT, -- あらすじ
+     standard_edition_id INT REFERENCES editions(id), -- 代表エディションの id
      PRIMARY KEY(id)
  );
  
