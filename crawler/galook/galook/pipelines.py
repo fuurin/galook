@@ -38,14 +38,14 @@ class PostgresPipeline(object):
         return curs
 
     def exists(self, curs):
-        return curs.description is not None
+        return curs.fetchone()[0] is not None
 
     def is_new_standard(self, item, standard_price, standard_id):
         return (item['price'] != -1 and item['price'] < standard_price) or (item['price'] == standard_price and item['id'] < standard_id)
 
     def process_item(self, item, spider):
         # 存在判定
-        curs = self.execute_sql("SELECT id FROM editions WHERE id = %s;", (item['id'], ))
+        curs = self.execute_sql("SELECT EXISTS(SELECT id FROM editions WHERE id = %s);", (item['id'], ))
         if self.exists(curs):
             return item
 
@@ -133,7 +133,7 @@ class PostgresPipeline(object):
             )
 
             curs = self.execute_sql(
-                "SELECT price FROM editions WHERE id = %s;", 
+                "SELECT EXISTS(SELECT price FROM editions WHERE id = %s);", 
                 (standard_id, )
             )
             standard_price = curs.fetchone()[0]
