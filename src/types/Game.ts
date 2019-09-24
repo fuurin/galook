@@ -1,3 +1,5 @@
+const NO_IMAGE_URL = "/img/no-image.png";
+
 export default class Game {
   public static create(game: any) {
     return new Game(
@@ -8,7 +10,7 @@ export default class Game {
       game.subgenre || [],
       game.title,
       game.url || "",
-      game.image || "../assets/no_image.svg",
+      game.image || NO_IMAGE_URL,
       game.writer || []);
   }
 
@@ -16,7 +18,7 @@ export default class Game {
     public id: number,
     public brand: string = "",
     public category: string[] = [],
-    public stroy: string = "",
+    public story: string = "",
     public subgenre: string[] = [],
     public title: string,
     public url: string = "",

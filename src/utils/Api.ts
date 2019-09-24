@@ -1,45 +1,44 @@
 import axios from 'axios';
-import Game from '@/types/Game';
+import GameQuery from '@/types/GameQuery';
 
-const BASE_URL = "http://3.115.42.95/";
+const BASE_URL = "https://api.galook.net/";
 
 export default class Api {
-    public similarGamesGromSynopsis(text: string, callback: (res: any) => void, limit: number = 20) {
-        this.access("similar_games", { text, limit }, callback);
+    public gameTitleCandidates(text: string, callback: (res: any) => void, limit: number = 20) {
+        // axios.get(BASE_URL + "games", {params: { text, limit }}).then(callback);
+        const res: any = {games: []};
+        for (let i = 0; i < 5; i++) {
+            for (const game of exampleResponce.games) {
+                res.games.push({ id: game.id, title: game.title});
+            }
+        }
+        callback(res);
     }
 
-    public similarGamesFromId(id: number, callback: (res: any) => void, limit: number = 20) {
-        this.access("similar_games", { id, limit }, callback);
+    public similarGamesFromSynopsis(text: string, callback: (res: any) => void, page: number = 0, limit: number = 20) {
+        this.search("similar_games", { text, page, limit }, callback);
     }
 
-    public gamesFromInfo(game: Game, callback: (res: any) => void, limit: number = 20) {
-        const params = {
-            brand: game.brand,
-            category: game.category,
-            story: game.stroy,
-            subgenre: game.subgenre,
-            title: game.title,
-            writer: game.writer,
-            limit,
-        };
-        this.access("games", params, callback);
+    public similarGamesFromId(id: number, callback: (res: any) => void, page: number = 0, limit: number = 20) {
+        this.search("similar_games", { id, page, limit }, callback);
+    }
+
+    public gamesFromInfo(queries: GameQuery[], callback: (res: any) => void, page: number = 0, limit: number = 20) {
+        const query = queries.reduce((acc, q) => Object.assign(acc, q.query(), {}));
+        this.search("games", { query, page, limit }, callback);
     }
 
     public game(id: number, callback: (res: any) => void) {
-        this.access("games/" + id.toString(), {}, callback);
+        const cb = (res: any) => {
+            res.game = res.games.filter((game: any) => game.id === id)[0];
+            callback(res);
+        };
+        this.search("games/" + id.toString(), {}, cb);
     }
 
-    public gameTitleCandidates(text: string, callback: (res: any) => void, limit: number = 20) {
-        this.access("games", { text, limit }, callback);
-    }
-
-    private access(endPointName: string, params: any, callback: (res: any) => void) {
+    private search(endPointName: string, params: any, callback: (res: any) => void) {
         // axios.get(BASE_URL + endPointName, { params }).then(callback);
-        const re = Object.assign({}, exampleResponce);
-        if (params.limit) {
-            re.games = re.games.slice(0, params.limit);
-        }
-        callback(re);
+        callback(Object.assign({}, exampleResponce));
     }
 }
 
@@ -56,7 +55,7 @@ const exampleResponce = {
             subgenre: ["アドベンチャー"],
             title: "神様お願い！お兄ちゃんの赤ちゃん妊娠したいの！ 〜ツンデレ妹＆清純妹とエッチなキセキでトラブル子作り三昧♪〜",
             url: "http://www.getchu.com/soft.phtml?id=786920",
-            image: "http://www.getchu.com/brandnew/786920/rc786920package.jpg",
+            image: "http://norn-soft.com/154/image/top.jpg",
             writer: ["鷹之爪"],
         },
         {
@@ -67,7 +66,7 @@ const exampleResponce = {
             subgenre: ["アドベンチャー"],
             title: "妹4人と中出し性活！〜じゃれつき甘えにお世話♪妹たちとイチャイチャがとまらない！お兄ちゃんの精子は絶滅必至!?〜",
             url: "http://www.getchu.com/soft.phtml?id=754181",
-            image: "http://www.getchu.com/brandnew/754181/c754181package.jpg",
+            image: "https://img.dlsite.jp/modpub/images2/parts/RJ103000/RJ102416/RJ102416_PTS0000002648_0.jpg",
             writer: ["鷹之爪"],
         },
         {
@@ -78,7 +77,7 @@ const exampleResponce = {
             subgenre: ["アドベンチャー"],
             title: "お兄ちゃん、右手の使用を禁止します！",
             url: "http://www.getchu.com/soft.phtml?id=814447",
-            image: "http://www.getchu.com/brandnew/814447/c814447package.jpg",
+            image: "https://images-na.ssl-images-amazon.com/images/I/51aQS5DwMCL.jpg",
             writer: ["七歌", "8", "東人"],
         },
     ],

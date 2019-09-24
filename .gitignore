@@ -23,5 +23,10 @@ yarn-error.log*
 
 credentials.csv
 
+<<<<<<< HEAD
 # 手元実験用
 api/src/similar_story/learn_story_vector.py
+=======
+__pycache__/
+/crawler/galook/.scrapy/
+>>>>>>> 5fd476dfd958eb8d4c8369b6afc9eb95a61a0f47

@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue} from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 
 const MAX_TEXT_SIZE = 100;
 
@@ -29,6 +29,12 @@ const MAX_TEXT_SIZE = 100;
 export default class SynopsisSearch extends Vue {
     private synopsis: string = "";
     private maxTextSize: number = MAX_TEXT_SIZE;
+
+    @Watch("$route")
+    private takeSynopsis(to: any, from: any) {
+        if (to.name !== "synopsis") return;
+        this.synopsis = to.params.synopsis;
+    }
 
     private empty(): boolean {
         return this.synopsis === "";
