@@ -123,7 +123,6 @@ class PostgresPipeline(object):
                 (item['id'], )
             )
         else:
-            print(game_id)
             curs = self.execute_sql(
                 textwrap.dedent("""\
                 UPDATE editions \
