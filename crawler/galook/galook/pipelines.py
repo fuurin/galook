@@ -38,13 +38,9 @@ class PostgresPipeline(object):
         return curs
 
     def exists(self, curs):
-<<<<<<< HEAD
         if curs.description is None:
             return False
         return curs.fetchone()[0]
-=======
-        return curs.fetchone()[0] is not None
->>>>>>> d8cb03d9206994427d55318a5bb76c7e94072fb7
 
     def is_new_standard(self, item, standard_price, standard_id):
         return (item['price'] != -1 and item['price'] < standard_price) or (item['price'] == standard_price and item['id'] < standard_id)
@@ -54,11 +50,6 @@ class PostgresPipeline(object):
         curs = self.execute_sql("SELECT EXISTS(SELECT id FROM editions WHERE id = %s);", (item['id'], ))
         if self.exists(curs):
             return item
-<<<<<<< HEAD
-        
-=======
-
->>>>>>> d8cb03d9206994427d55318a5bb76c7e94072fb7
         # editions テーブル
         curs = self.execute_sql(
             textwrap.dedent("""\
@@ -101,7 +92,6 @@ class PostgresPipeline(object):
             )
 
         # games テーブル・editions テーブルの game_id 列
-<<<<<<< HEAD
         standard_id = None
         if item['story']:
             curs = self.execute_sql("SELECT EXISTS(SELECT id FROM games WHERE story = %s);", (item['story'], ))
@@ -113,21 +103,6 @@ class PostgresPipeline(object):
                     (item['story'], )
                 )
                 game_id, standard_id = curs.fetchone()
-=======
-        if item['story']:
-            curs = self.execute_sql(
-                textwrap.dedent("""\
-                SELECT id, standard_edition_id FROM games WHERE story = %s;
-                """), 
-                (item['story'], )
-            )
-            if self.exists(curs):
-                game_id, standard_id = curs.fetchone()[0]
-            else:
-                standard_id = None
-        else:
-            standard_id = None
->>>>>>> d8cb03d9206994427d55318a5bb76c7e94072fb7
         if not standard_id:
             curs = self.execute_sql(
                 textwrap.dedent("""\
@@ -155,31 +130,14 @@ class PostgresPipeline(object):
                 """), 
                 (game_id, item['id'])
             )
-<<<<<<< HEAD
             curs = self.execute_sql(
                 "SELECT price FROM editions WHERE id = %s;", 
-=======
-
-            curs = self.execute_sql(
-                "SELECT EXISTS(SELECT price FROM editions WHERE id = %s);", 
->>>>>>> d8cb03d9206994427d55318a5bb76c7e94072fb7
                 (standard_id, )
             )
             standard_price = curs.fetchone()[0]
             if self.is_new_standard(item, standard_price, standard_id):
                 curs = self.execute_sql(
                     textwrap.dedent("""\
-<<<<<<< HEAD
-                    UPDATE editions \
-                    SET game_id = %s\
-                    WHERE id = %s;
-                    """), 
-                    (game_id, standard_id)
-                )
-                curs = self.execute_sql(
-                    textwrap.dedent("""\
-=======
->>>>>>> d8cb03d9206994427d55318a5bb76c7e94072fb7
                     UPDATE games \
                     SET standard_edition_id = %s\
                     WHERE standard_edition_id = %s;
