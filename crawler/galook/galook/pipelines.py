@@ -38,9 +38,7 @@ class PostgresPipeline(object):
         return curs
 
     def exists(self, curs):
-        if curs.description is None:
-            return False
-        return curs.fetchone()[0]
+        return curs.fetchone()[0] is not None
 
     def is_new_standard(self, item, standard_price, standard_id):
         return (item['price'] != -1 and item['price'] < standard_price) or (item['price'] == standard_price and item['id'] < standard_id)
@@ -137,14 +135,6 @@ class PostgresPipeline(object):
             )
             standard_price = curs.fetchone()[0]
             if self.is_new_standard(item, standard_price, standard_id):
-                curs = self.execute_sql(
-                    textwrap.dedent("""\
-                    UPDATE editions \
-                    SET game_id = %s\
-                    WHERE id = %s;
-                    """), 
-                    (game_id, standard_id)
-                )
                 curs = self.execute_sql(
                     textwrap.dedent("""\
                     UPDATE games \
