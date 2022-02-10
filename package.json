@@ -16,7 +16,7 @@
     "ismobilejs": "^1.0.2",
     "js-cookie": "^2.2.1",
     "less": "2.3.1",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "vue": "^2.6.10",
     "vue-axios": "^2.1.4",
     "vue-class-component": "^7.0.2",
